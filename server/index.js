@@ -19,7 +19,7 @@ mongoose.connect("mongodb://localhost:27017/realChat", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
-    console.log("db connection successfully");
+    // console.log("db connection successfully");
 }).catch((err) => {
     console.log(err.message);
 })
@@ -35,12 +35,12 @@ io.on("connection", (socket) => {
     console.log('User Connected', socket.id)
 
     socket.on("join_room", (data) => {
-        console.log("data", data);
+        // console.log("data", data);
         socket.join(data.id);
     })
 
     socket.on("send_message", (data) => {
-        console.log('this is action of send data', data)
+        // console.log('this is action of send data', data)
         socket.to(data.to).emit("receive_message", data)
     })
 

@@ -3,7 +3,6 @@ const Messages = require("../models/messageModel");
 const bcrypt = require("bcrypt");
 
 module.exports.register = async (req, res, next) => {
-    // console.log("register ", req.body);
     try {
         const { username, email, password } = req.body;
         const usernameCheck = await User.findOne({ username });
@@ -29,7 +28,6 @@ module.exports.register = async (req, res, next) => {
 };
 
 module.exports.login = async (req, res, next) => {
-    // console.log("login ", req.body);
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -54,27 +52,16 @@ module.exports.login = async (req, res, next) => {
     }
 };
 
-
 module.exports.getAllUsers = async (req, res, next) => {
     try {
         const users = await User.find({ _id: { $ne: req.params.id } }).select([
             "email", "username", "_id",
         ])
-        // console.log("getAllUsers ", users);
         return res.json({ users })
-        // const userInfo = {
-        //     user: users.username,
-        //     id: users._id,
-        // }
-        // return res.json({
-        //     status: true,
-        //     user: userInfo
-        // })
     } catch (ex) {
         next(ex);
     }
 }
-
 
 module.exports.addMessage = async (req, res, next) => {
     try {
@@ -87,15 +74,8 @@ module.exports.addMessage = async (req, res, next) => {
 }
 
 module.exports.getMessage = async (req, res, next) => {
-    // const from = req.query.from;
-    // const to = req.query.to;
-    // console.log("from", from)
-    // console.log("to", to)  
-    // db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
     try {
         const message = await Messages.find();
-        // const message = await Messages.find({ to, from });
-        console.log("message", message);
         return res.json({ message })
     } catch (error) {
         next(error)
