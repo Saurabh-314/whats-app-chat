@@ -3,6 +3,10 @@ import ScrollToBottom from 'react-scroll-to-bottom'
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
+import io from 'socket.io-client'
+const socket = io.connect("http://localhost:5000");
+const ENDPOINT = "https://what-app-server.herokuapp.com/auth";
+
 const Chat = (props) => {
     // const navigate = useNavigate();
     const { socket } = props
@@ -27,16 +31,15 @@ const Chat = (props) => {
     const getAllUser = async (id) => {
         // console.log("getAllUser")
         // console.log("ids", id)
-        const { data } = await axios.get(`http://localhost:5000/auth/allusers/${id}`);
+        const { data } = await axios.get(`${ENDPOINT}/allusers/${id}`);
         // console.log("fetch all user", data.users);
         setUsers(data.users)
     }
 
     const getMessage = async () => {
         // console.log("id", id)
-        const { data } = await axios.get(`http://localhost:5000/auth/getmsg`);
-        // setMessageList
-        console.log("get Message", data.message);
+        const { data } = await axios.get(`${ENDPOINT}/getmsg`);
+        // console.log("get Message", data.message);
         if (data.message) {
             setMessageList((list) => [...list, ...data.message])
         }
@@ -74,7 +77,7 @@ const Chat = (props) => {
                 time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
             }
             await socket.emit('send_message', messageData);
-            await axios.post("http://localhost:5000/auth/addmsg", messageData);
+            await axios.post(`${ENDPOINT}/addmsg`, messageData);
             setMessageList((list) => [...list, messageData])
             setCurrentMessage("")
         }

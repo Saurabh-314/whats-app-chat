@@ -5,10 +5,10 @@ const bcrypt = require("bcrypt");
 module.exports.register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
-        const usernameCheck = await User.findOne({ username });
+        // const usernameCheck = await User.findOne({ username });
 
-        if (usernameCheck)
-            return res.json({ msg: "Username already used", status: false });
+        // if (usernameCheck)
+            // return res.json({ msg: "Username already used", status: false });
 
         const emailCheck = await User.findOne({ email });
         if (emailCheck)
@@ -21,7 +21,15 @@ module.exports.register = async (req, res, next) => {
             password: hashedPassword
         });
         delete user.password;
-        return res.json({ status: true, user })
+        const userInfo = {
+            user: user.username,
+            id: user._id,
+        }
+        return res.json({
+            status: true,
+            user: userInfo
+        })
+        
     } catch (err) {
         next(err)
     }
